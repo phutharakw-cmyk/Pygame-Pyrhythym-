@@ -22,8 +22,6 @@ your-project/
 │
 ├── assets/                  (create folder)
 │   ├── click.wav           (copy these 3 files)
-│   ├── hit.wav
-│   └── miss.wav
 │
 └── songs/                   (your existing songs)
     └── (your song folders)
@@ -68,7 +66,7 @@ python game.py
 2. Press A in selectsong page to show data analysis 
 3. There are some sample data in data_logs that you can see the analysis
 ---
-## 🎯 Common Tasks
+## Common Tasks
 
 ### How do I play a song?
 1. Run `python game.py`
