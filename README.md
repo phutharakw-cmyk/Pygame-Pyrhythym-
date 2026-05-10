@@ -2,7 +2,7 @@
 
 ## Project Description
 
-- **Project by:** Phuthipong (เฟ)
+- **Project by:** Phutharak Wongpitak 6810545841
 - **Game Genre:** Rhythm, Music
 
 Pyrhythym is a rhythm game built with Python and Pygame. Notes fall from the top of the screen and the player must hit them in time with the music using keyboard keys and mouse position. The game has 6 lanes — 4 center lanes (D, F, J, K) and 2 side lanes (L/R) tracked by the mouse.
@@ -16,7 +16,7 @@ Pyrhythym is a rhythm game built with Python and Pygame. Notes fall from the top
 To clone this project:
 
 ```sh
-git clone https://github.com/<username>/pyrhythym.git
+git clone https://github.com/phutharakw-cmyk/Pygame-Pyrhythym-.git
 ```
 
 To create and run a Python environment for this project:
