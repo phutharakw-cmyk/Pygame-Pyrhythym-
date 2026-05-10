@@ -22,9 +22,9 @@ HIT_Y       = SCREEN_HEIGHT - 120   # y position of hit zone line
 NOTE_HEIGHT = 30
 
 # --- Judgement windows (seconds) ---
-PERFECT_WINDOW = 0.07
-GOOD_WINDOW    = 0.13
-MISS_WINDOW    = 0.17
+PERFECT_WINDOW = 0.05
+GOOD_WINDOW    = 0.12
+MISS_WINDOW    = 0.15
 
 # --- Scoring ---
 SCORE_PERFECT = 300
@@ -32,7 +32,7 @@ SCORE_GOOD    = 100
 SCORE_MISS    = 0
 
 # --- Health ---
-MAX_HEALTH   = 100.0
+MAX_HEALTH   = 300.0
 DAMAGE_MISS  = 8.0
 HEAL_PERFECT = 0.3
 

@@ -9,17 +9,15 @@ from config import SONGS_DIR, SCREEN_WIDTH, SCREEN_HEIGHT
 if TYPE_CHECKING:
     from game import Game
 
-# ── Layout ────────────────────────────────────────────────
 HEADER_H  = 110
 FOOTER_H  = 50
 LIST_X    = 60
 LIST_W    = 700
 ITEM_H    = 80
-PREVIEW_X = 820   # x position of preview panel
+PREVIEW_X = 820   
 PREVIEW_W = SCREEN_WIDTH - PREVIEW_X - 20
-COVER_SZ  = 220   # cover image size
+COVER_SZ  = 220   
 
-# ── Colors ────────────────────────────────────────────────
 C_BG      = (14,  14,  22)
 C_PANEL   = (22,  22,  36)
 C_ITEM    = (28,  28,  50)
@@ -45,7 +43,7 @@ class Select_song_page:
         self.selectedDiff:  Optional[Difficulty] = None
         self._hovered:  int = -1
         self._selected: int = -1
-        self._diff_idx: int = 0   # selected difficulty index
+        self._diff_idx: int = 0   
         self._scroll:   int = 0
 
         self.font_title = pygame.font.SysFont("consolas", 26, bold=True)
@@ -53,10 +51,9 @@ class Select_song_page:
         self.font_sm    = pygame.font.SysFont("consolas", 13)
         self.font_lg    = pygame.font.SysFont("consolas", 20, bold=True)
 
-        self._record_cache: dict = {}   # key=(title,diff) → Record
+        self._record_cache: dict = {}   
         self.displaySongList()
 
-    # ── Public API ────────────────────────────────────────
     def displaySongList(self) -> None:
         self.songList     = scan_songs(SONGS_DIR)
         self._selected    = -1
@@ -100,7 +97,6 @@ class Select_song_page:
         from pages.main_menu_page import Main_menu_page
         self.game.change_page(Main_menu_page(self.game))
 
-    # ── Page interface ────────────────────────────────────
     def handle_events(self, events: list) -> None:
         for event in events:
             if event.type == pygame.KEYDOWN:
@@ -142,7 +138,6 @@ class Select_song_page:
                 self._hovered = self._item_at(event.pos)
 
             if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-                # Check difficulty badge click
                 if self.selectedSong:
                     consumed = self._click_diff_badge(event.pos)
                     if consumed:
@@ -165,7 +160,6 @@ class Select_song_page:
         self._draw_preview(screen)
         self._draw_footer(screen)
 
-    # ── Drawing ───────────────────────────────────────────
     def _draw_header(self, screen: pygame.Surface) -> None:
         W = screen.get_width()
         pygame.draw.rect(screen, C_PANEL, (0, 0, W, HEADER_H))
@@ -201,7 +195,6 @@ class Select_song_page:
 
         self._text(screen, song.title, x + 16, y + 10, self.font_med, C_TEXT)
 
-        # Difficulty badges
         bx = x + 16
         for diff in song.difficulties:
             c    = DIFF_COLORS.get(diff.label, C_DEFAULT)
@@ -214,7 +207,6 @@ class Select_song_page:
         if not song.difficulties:
             self._text(screen, "NO CHART", x + 16, y + 36, self.font_sm, C_WARN)
 
-        # BPM info on right
         if song.difficulties:
             info = f"BPM {song.bpm:.0f}"
             self._text(screen, info, x + w - 120, y + 36, self.font_sm, C_DIM)
@@ -229,20 +221,17 @@ class Select_song_page:
         pw    = PREVIEW_W
         ph    = screen.get_height() - py - FOOTER_H - 10
 
-        # Panel background
         pygame.draw.rect(screen, C_PANEL, (px, py, pw, ph), border_radius=10)
         pygame.draw.rect(screen, C_BORDER, (px, py, pw, ph), 1, border_radius=10)
 
         cy = py + 16
 
-        # ── Cover Image ──
         cover = song.get_cover((COVER_SZ, COVER_SZ))
         if cover:
             cx = px + (pw - COVER_SZ) // 2
             screen.blit(cover, (cx, cy))
             pygame.draw.rect(screen, C_BORDER, (cx, cy, COVER_SZ, COVER_SZ), 1)
         else:
-            # Placeholder
             ph_rect = pygame.Rect(px + (pw - COVER_SZ) // 2, cy, COVER_SZ, COVER_SZ)
             pygame.draw.rect(screen, (30, 30, 50), ph_rect, border_radius=6)
             pygame.draw.rect(screen, C_BORDER, ph_rect, 1, border_radius=6)
@@ -251,7 +240,6 @@ class Select_song_page:
                                   ph_rect.centery - no_img.get_height() // 2))
         cy += COVER_SZ + 14
 
-        # ── Song Title ──
         title_surf = self.font_lg.render(song.title, True, C_TEXT)
         if title_surf.get_width() > pw - 20:
             title_surf = pygame.transform.scale(
@@ -259,12 +247,10 @@ class Select_song_page:
         screen.blit(title_surf, (px + (pw - title_surf.get_width()) // 2, cy))
         cy += 28
 
-        # ── BPM ──
         bpm_surf = self.font_sm.render(f"BPM  {song.bpm:.0f}", True, C_DIM)
         screen.blit(bpm_surf, (px + (pw - bpm_surf.get_width()) // 2, cy))
         cy += 26
 
-        # ── Difficulty Selector ──
         if not song.difficulties:
             return
 
@@ -275,7 +261,6 @@ class Select_song_page:
         screen.blit(diff_label, (px + (pw - diff_label.get_width()) // 2, cy))
         cy += 20
 
-        # Draw difficulty badges
         self._diff_badge_rects = []
         total_w = sum(70 for _ in song.difficulties) + (len(song.difficulties) - 1) * 8
         bx = px + (pw - total_w) // 2
@@ -295,28 +280,26 @@ class Select_song_page:
             bx += 78
         cy += 38
 
-        # ── Difficulty Info ──
         if self.selectedDiff:
             d     = self.selectedDiff
             notes = self.font_sm.render(f"Notes  {d.note_count}", True, C_TEXT)
             screen.blit(notes, (px + (pw - notes.get_width()) // 2, cy))
             cy += 22
 
-        # ── Best Record ──
         rec = self._get_record()
         if rec and rec.play_count > 0:
             pygame.draw.line(screen, C_BORDER, (px+10, cy), (px+pw-10, cy))
             cy += 8
-            # Best score
+
             bs = self.font_med.render(f"Best  {rec.best_score:,}", True, C_ACCENT)
             screen.blit(bs, (px + (pw - bs.get_width()) // 2, cy))
             cy += 22
-            # Best combo + plays
+
             sub = self.font_sm.render(
                 f"Combo  {rec.best_combo}    Plays  {rec.play_count}", True, C_DIM)
             screen.blit(sub, (px + (pw - sub.get_width()) // 2, cy))
             cy += 20
-            # Badges
+
             bx2 = px + 20
             if rec.all_perfect:
                 bx2 = self.__badge(screen, bx2, cy, "ALL PERFECT", (255, 210, 50))
@@ -328,7 +311,6 @@ class Select_song_page:
             screen.blit(ns, (px + (pw - ns.get_width()) // 2, cy))
             cy += 22
 
-        # ── Hint ──
         hint = self.font_sm.render("Enter to play", True, C_DIM)
         screen.blit(hint, (px + (pw - hint.get_width()) // 2, cy + 4))
 
@@ -342,7 +324,6 @@ class Select_song_page:
                    f"Notes: {self.selectedDiff.note_count}")
             self._text(screen, msg, 40, fy + 14, self.font_sm, C_TEXT)
 
-    # ── Helpers ───────────────────────────────────────────
     def _cycle_diff(self, direction: int) -> None:
         if not self.selectedSong or not self.selectedSong.difficulties:
             return

@@ -56,7 +56,6 @@ class ResultPopup:
         self._overlay.fill(C_BG_OVERLAY)
 
     def handle_events(self, events: list) -> bool:
-        """คืน True เมื่อผู้เล่นกด Enter / Space / ESC หรือคลิก"""
         for event in events:
             if event.type == pygame.KEYDOWN:
                 if event.key in (pygame.K_RETURN, pygame.K_SPACE, pygame.K_ESCAPE):
